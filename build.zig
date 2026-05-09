@@ -10,9 +10,13 @@ const Options = struct {
 pub fn build(b: *Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+    const opt_use_gles3 = b.option(bool, "gles3", "Force OpenGL ES3 (default: false)") orelse false;
+    const opt_use_wayland = b.option(bool, "wayland", "Force Wayland (default: false, Linux only, not supported in main-line headers)") orelse false;
     const dep_sokol = b.dependency("sokol", .{
         .target = target,
         .optimize = optimize,
+        .gles3 = opt_use_gles3,
+        .wayland = opt_use_wayland,
     });
     const mod_pacman = b.createModule(.{
         .root_source_file = b.path("src/pacman.zig"),
@@ -60,7 +64,7 @@ fn buildWeb(b: *Build, opts: Options) !void {
         .emsdk = emsdk,
         .use_webgl2 = true,
         .use_emmalloc = true,
-        .use_filesystem = false,
+        .use_filesystem = true,
         .shell_file_path = opts.dep_sokol.path("src/sokol/web/shell.html"),
     });
     // attach Emscripten linker output to default install step

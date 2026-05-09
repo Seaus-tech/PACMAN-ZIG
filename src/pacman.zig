@@ -265,7 +265,7 @@ const SoundFunc = *const fn (usize) void;
 const SoundDesc = struct {
     func: ?SoundFunc = null, // optional pointer to sound effect callback if this is a procedural sound
     dump: ?[]const u32 = null, // optional register dump data slice
-    voice: [NumVoices]bool = .{false} ** NumVoices,
+    voice: [NumVoices]bool = @splat(false),
 };
 
 // a sound 'hardware voice' (of a Namco WSG emulation)
@@ -285,7 +285,7 @@ const Sound = struct {
     dump: ?[]const u32 = null, // optional register dump data
     num_ticks: u32 = 0, // sound effect length in ticks (only for register dump sounds)
     stride: u32 = 0, // register data stride for multivoice dumps (1,2 or 3)
-    voice: [NumVoices]bool = .{false} ** NumVoices,
+    voice: [NumVoices]bool = @splat(false),
 };
 
 // all mutable state is in a single nested global
@@ -1493,7 +1493,7 @@ fn gameInitPlayfield() void {
         \\2BBBBBBBBBBBBBBBBBBBBBBBBBB3
     ;
     // map ASCII to tile codes
-    var t = [_]u8{TileCodeDot} ** 128;
+    var t: [128]u8 = @splat(TileCodeDot);
     t['_'] = 0x40;
     t['0'] = 0xD1;
     t['1'] = 0xD0;
