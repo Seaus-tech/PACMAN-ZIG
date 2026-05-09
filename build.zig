@@ -64,7 +64,7 @@ fn buildWeb(b: *Build, opts: Options) !void {
         .emsdk = emsdk,
         .use_webgl2 = true,
         .use_emmalloc = true,
-        .use_filesystem = false,
+        .use_filesystem = true,
         .shell_file_path = opts.dep_sokol.path("src/sokol/web/shell.html"),
     });
     // attach Emscripten linker output to default install step
